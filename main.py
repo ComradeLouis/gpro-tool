@@ -1,1 +1,10 @@
-token = "eyJ0eXAiOiJKV1QiLCAiYWxnIjoiSFMyNTYifQ.eyJpZCI6IDEwNDM4OTIsImNyZWF0ZWQiOiJTYXQgSnVuIDI5IDIzOjIxOjMxIFVUQyswMjAwIDIwMjQifQ.Wqt-mFt01J8FEVRwNB12JIQ8vNLe0Mx_eSXK2nXFy_0"
+from getData import *
+
+trackInfo = get_next_track()
+driverInfo = get_driver_info()
+carData,weather = get_qualy_and_race_data()
+
+print(trackInfo)
+print(driverInfo)
+print(carData)
+print(weather)
