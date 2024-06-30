@@ -1,4 +1,5 @@
 def lookup_static_data(track):
+    #TODO - change to ordered lists
     staticTrackData = {
         'A1-Ring':{'wings':332,'engine':773,'brakes':675,'gear':802,'susp':553},
         'Adelaide':{'wings':624,'engine':528,'brakes':369,'gear':560,'susp':719},
@@ -60,11 +61,11 @@ def lookup_static_data(track):
     trackDataInput = f'{track}'
     trackData = staticTrackData[trackDataInput]
     partData = {
-        'wings':{4.5,-0.45,-0.75,35.7,-9.9,-12.9,4,207},
-        'engine':{-3.75,-0.5,0.3,0.77,16,8.2,4.59,-231},
-        'brakes':{5.9,0.65,-0.5,-28.6,8,-1.915,102},
-        'gear':{-4.2,1.05,0.45,-41.5,9,-3.835,-8.7},
-        'susp':{-6,-0.5,0.76,1.54,34.8,-17,-10,5.2,-249}
+        'wings':[4.5,-0.45,-0.75,35.7,-9.9,-12.9,4.0,207],
+        'engine':[-3.75,-0.5,0.3,0.77,16,8.2,4.59,-231],
+        'brakes':[5.9,0.65,-0.5,-28.6,8.0,-1.915,102],
+        'gear':[-4.2,1.05,0.45,-41.5,9.0,-3.835,-8.7],
+        'susp':[-6.0,-0.5,0.76,1.54,34.8,-17.0,-10.0,5.2,-249]
     }
     
     return trackData,partData
