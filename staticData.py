@@ -1,4 +1,4 @@
-def static_data_lookup(track):
+def lookup_static_data(track):
     staticTrackData = {
         'A1-Ring':{'wings':332,'engine':773,'brakes':675,'gear':802,'susp':553},
         'Adelaide':{'wings':624,'engine':528,'brakes':369,'gear':560,'susp':719},
