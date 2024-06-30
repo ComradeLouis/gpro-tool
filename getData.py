@@ -89,6 +89,5 @@ def get_tyre_supplier():
     return tyreSupplier
 
 load_dotenv()
-
 token = os.getenv('token')
 path = "https://gpro.net/gb/backend/api/v2/"
