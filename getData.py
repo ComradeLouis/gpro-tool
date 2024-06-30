@@ -1,5 +1,7 @@
 import requests
 from staticData import lookup_tyre_suppliers
+from dotenv import load_dotenv
+import os
 
 def get_next_track():
     endpoint = f"{path}TrackProfile"
@@ -86,5 +88,7 @@ def get_tyre_supplier():
     
     return tyreSupplier
 
-token = "eyJ0eXAiOiJKV1QiLCAiYWxnIjoiSFMyNTYifQ.eyJpZCI6IDEwNDM4OTIsImNyZWF0ZWQiOiJTYXQgSnVuIDI5IDIzOjIxOjMxIFVUQyswMjAwIDIwMjQifQ.Wqt-mFt01J8FEVRwNB12JIQ8vNLe0Mx_eSXK2nXFy_0"
+load_dotenv()
+
+token = os.getenv('token')
 path = "https://gpro.net/gb/backend/api/v2/"
