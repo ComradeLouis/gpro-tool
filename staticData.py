@@ -69,3 +69,17 @@ def lookup_static_data(track):
     }
     
     return trackData,partData
+
+def lookup_tyre_suppliers(tyreId):
+    
+    tyreSuppliers = {
+        '1': 'Pipirelli',
+        '9': 'Avonn',
+        '2': 'Yokomama',
+        '3': 'Dunnolop',
+        '8': 'Contimental',
+        '4': 'Badyear'
+    }
+    tyreSupplier = tyreSuppliers[f'{tyreId}']
+    
+    return tyreSupplier

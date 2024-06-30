@@ -1,4 +1,5 @@
 import requests
+from staticData import lookup_tyre_suppliers
 
 def get_next_track():
     endpoint = f"{path}TrackProfile"
@@ -73,6 +74,17 @@ def get_qualy_and_race_data():
     carData = {"carValues":carValues,"carPartLevels":partLevels,"carPartWear":partWear}
     
     return carData,weather
+
+def get_tyre_supplier():
+    endpoint = f"{path}office"
+    headers = {"Authorization": f"Bearer {token}"}
+    officeData = requests.get(endpoint, headers=headers).json()
+    
+    tyreSupplierId = officeData['tyreSupplierId']
+    
+    tyreSupplier = lookup_tyre_suppliers(tyreSupplierId)
+    
+    return tyreSupplier
 
 token = "eyJ0eXAiOiJKV1QiLCAiYWxnIjoiSFMyNTYifQ.eyJpZCI6IDEwNDM4OTIsImNyZWF0ZWQiOiJTYXQgSnVuIDI5IDIzOjIxOjMxIFVUQyswMjAwIDIwMjQifQ.Wqt-mFt01J8FEVRwNB12JIQ8vNLe0Mx_eSXK2nXFy_0"
 path = "https://gpro.net/gb/backend/api/v2/"

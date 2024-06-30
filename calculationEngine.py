@@ -84,3 +84,6 @@ def calculate_setup(driverInfo,carData,weather,trackData,partData):
     }
     
     return setup
+
+def find_race_strategy():
+    return 1
