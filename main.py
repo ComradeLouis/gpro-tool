@@ -7,7 +7,10 @@ trackInfo = get_next_track()
 driverInfo = get_driver_info()
 carData,weather = get_qualy_and_race_data()
 trackData,partData = lookup_static_data(trackInfo['trackName'])
+officeData = get_office_data()
 
-setup = json.dumps(calculate_setup(driverInfo,carData,weather,trackData,partData))
+setup = (calculate_setup(driverInfo,carData,weather,trackData,partData))
 
-print(setup)
+setup_file = open(f"{trackInfo['trackName']}_S{officeData['season']}_R{officeData['race']}_setup.json", "w")
+
+json.dump(setup, setup_file, ensure_ascii=False, indent=2)

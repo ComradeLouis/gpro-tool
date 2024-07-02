@@ -77,7 +77,7 @@ def get_qualy_and_race_data():
     
     return carData,weather
 
-def get_tyre_supplier():
+def get_office_data():
     endpoint = f"{path}office"
     headers = {"Authorization": f"Bearer {token}"}
     officeData = requests.get(endpoint, headers=headers).json()
@@ -85,8 +85,16 @@ def get_tyre_supplier():
     tyreSupplierId = officeData['tyreSupplierId']
     
     tyreSupplier = lookup_tyre_suppliers(tyreSupplierId)
+    season = officeData['seasonNb']
+    race = officeData['raceNb']
     
-    return tyreSupplier
+    officeResponse = {
+        'tyreSupplier':tyreSupplier,
+        'season':season,
+        'race':race
+    }
+    
+    return officeResponse
 
 load_dotenv()
 token = os.getenv('token')
