@@ -15,4 +15,3 @@ setupAndFuel = {'setup': setup, 'fuel': fuelRequired}
 setup_file = f"{trackInfo['trackName']}_R{officeData['race']}_setup.json"
 setup_path = f'S{officeData['season']}_setups'
 write_json(setup_path,setup_file,setupAndFuel)
-
