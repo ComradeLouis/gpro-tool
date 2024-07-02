@@ -15,8 +15,10 @@ def get_next_track():
     raceDistance = trackProfile['raceDistance']
     raceLaps = trackProfile['laps']
     pitTime = trackProfile['timeInOutPits']
+    fuelConsumption = trackProfile['fuelConsumption']
+    tyreWear = trackProfile['tyreWear']
     
-    trackData = {"trackName":trackName,"power":trackPower,"accel":trackAccel,"handling":trackHandl,"raceDistance":float(raceDistance),"laps":raceLaps,"pitTime":pitTime}
+    trackData = {"trackName":trackName,"power":trackPower,"accel":trackAccel,"handling":trackHandl,"raceDistance":float(raceDistance),"laps":raceLaps,"pitTime":pitTime,'fuelConsumption':fuelConsumption,'tyreWear':tyreWear}
 
     return trackData
 
