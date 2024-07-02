@@ -89,6 +89,6 @@ def find_race_strategy(fuelData,carData,trackInfo):
     engineLvl = str(int(carData['carPartLevels']['engine']))
     fuelCoeff = float(fuelData[engineLvl])
     fuelConsumption = fuelCoeff*1.05
-    fuelReq = fuelConsumption * trackInfo['raceDistance']
+    fuelReq = math.ceil(fuelConsumption * trackInfo['raceDistance'])
     
     return fuelReq
