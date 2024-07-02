@@ -1,7 +1,6 @@
 from getData import *
 from staticData import *
 from calculationEngine import *
-import json
 
 trackInfo = get_next_track()
 driverInfo = get_driver_info()
@@ -11,4 +10,3 @@ officeData = get_office_data()
 
 setup = (calculate_setup(driverInfo,carData,weather,trackData,partData))
 setup_file = open(f"{trackInfo['trackName']}_S{officeData['season']}_R{officeData['race']}_setup.json", "w")
-json.dump(setup, setup_file, ensure_ascii=False, indent=2)
