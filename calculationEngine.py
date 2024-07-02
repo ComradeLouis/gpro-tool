@@ -85,5 +85,12 @@ def calculate_setup(driverInfo,carData,weather,trackData,partData):
     
     return setup
 
-def find_race_strategy():
-    return 1
+def find_race_strategy(fuelData,carData,trackInfo):
+    track = trackInfo['trackName']
+    engineLvl = str(int(carData['carPartLevels']['engine']))
+    fuelCoeffs = fuelData[track]
+    fuelCoeff = float(fuelCoeffs[engineLvl])
+    fuelConsumption = fuelCoeff*1.05
+    fuelReq = fuelConsumption * trackInfo['raceDistance']
+    
+    return fuelReq
