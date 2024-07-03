@@ -94,7 +94,6 @@ def find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData):
     tyreDurability = officeData['tyreData']['durability']
     tyreDurabilityData = lookup_tyre_life(tyreDurability)
     tyreLife = []
-    tyreCompoundLife = []
     tyres = ['xsoft','soft','medium','hard','rain']
     raceTemp = math.ceil((weather['raceQ1TempLow']+weather['raceQ1TempHigh']+weather['raceQ3TempLow']+weather['raceQ2TempHigh']+weather['raceQ4TempLow']+weather['raceQ4TempHigh'])/6)
     raceHumidity = math.ceil((weather['raceQ1HumLow']+weather['raceQ1HumHigh']+weather['raceQ3HumLow']+weather['raceQ2HumHigh']+weather['raceQ4HumLow']+weather['raceQ4HumHigh'])/6)
@@ -112,13 +111,5 @@ def find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData):
             calcTyreLife[f'{tyre}'] = maxTyreLife
         CTTyreLife[f'{CT}'] = calcTyreLife 
         tyreLife = CTTyreLife
-# todo - function to calculate first three coeffs - decision on CT coeff neede:
-# =
-# *LOOKUP(F9,TyreData!H21:H25,TyreData!I21:I25) TRACK COEFF
-# *LOOKUP(B3,TyreData!D28:D78,TyreData!E28:E78) TEMP COEFF
-# *LOOKUP(B4,TyreData!H28:H128,TyreData!I28:I128) HUM COEFF
-# *(1-I9*LOOKUP(G9,TyreData!D21:D24,TyreData!E21:E24))))) CT COEFF
-#
-# iterate the above based on all tyre types, and return kms till 100%.
     
     return fuelReq,tyreLife
