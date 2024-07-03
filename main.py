@@ -11,7 +11,7 @@ officeData = get_office_data()
 
 setup = (calculate_setup(driverInfo,carData,weather,trackData,partData))
 fuelRequired,tyreLife = (find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData))
-setupAndFuel = {'setup': setup, 'fuel': fuelRequired, 'tyres': tyreLife}
+setupAndFuel = {'setup': setup, 'fuel': fuelRequired, 'raceDistance':trackInfo['raceDistance'],'tyres': tyreLife}
 setup_file = f"{trackInfo['trackName']}_R{officeData['race']}_setup.json"
 setup_path = f'S{officeData['season']}_setups'
 write_json(setup_path,setup_file,setupAndFuel)
