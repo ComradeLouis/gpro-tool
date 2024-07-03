@@ -1,4 +1,5 @@
 import math
+from staticData import lookup_tyre_life, lookup_wear_coeffs
 
 def calculate_setup(driverInfo,carData,weather,trackData,partData):
     
@@ -85,10 +86,40 @@ def calculate_setup(driverInfo,carData,weather,trackData,partData):
     
     return setup
 
-def find_race_strategy(fuelData,carData,trackInfo):
+def find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData):
     engineLvl = str(int(carData['carPartLevels']['engine']))
     fuelCoeff = float(fuelData[engineLvl])
     fuelConsumption = fuelCoeff*1.05
     fuelReq = math.ceil(fuelConsumption * trackInfo['raceDistance'])
+    tyreDurability = officeData['tyreData']['durability']
+    tyreDurabilityData = lookup_tyre_life(tyreDurability)
+    tyreLife = []
+    tyreCompoundLife = []
+    tyres = ['xsoft','soft','medium','hard','rain']
+    raceTemp = math.ceil((weather['raceQ1TempLow']+weather['raceQ1TempHigh']+weather['raceQ3TempLow']+weather['raceQ2TempHigh']+weather['raceQ4TempLow']+weather['raceQ4TempHigh'])/6)
+    raceHumidity = math.ceil((weather['raceQ1HumLow']+weather['raceQ1HumHigh']+weather['raceQ3HumLow']+weather['raceQ2HumHigh']+weather['raceQ4HumLow']+weather['raceQ4HumHigh'])/6)
+    trackWear = trackInfo['tyreWear']
+    CTRisk = ['0','10','20','30','40','50','60','70','80','90','100']
+    CTTyreLife = {}
     
-    return fuelReq
+    for CT in CTRisk:
+        calcTyreLife = {}
+        for tyre in tyres:
+            baseTyreLife = float(tyreDurabilityData[tyre])       
+            trackCoeff,tempCoeff,humCoeff,ctCoeff = lookup_wear_coeffs(trackWear,raceTemp,raceHumidity,tyre)
+            wearCoeff = trackCoeff*tempCoeff*humCoeff*(1-(int(CT)*ctCoeff))
+            maxTyreLife = math.floor(baseTyreLife*wearCoeff)
+            calcTyreLife[f'{tyre}'] = maxTyreLife
+        CTTyreLife[f'{CT}'] = calcTyreLife 
+        print(CTTyreLife)
+        tyreLife = CTTyreLife
+# todo - function to calculate first three coeffs - decision on CT coeff neede:
+# =
+# *LOOKUP(F9,TyreData!H21:H25,TyreData!I21:I25) TRACK COEFF
+# *LOOKUP(B3,TyreData!D28:D78,TyreData!E28:E78) TEMP COEFF
+# *LOOKUP(B4,TyreData!H28:H128,TyreData!I28:I128) HUM COEFF
+# *(1-I9*LOOKUP(G9,TyreData!D21:D24,TyreData!E21:E24))))) CT COEFF
+#
+# iterate the above based on all tyre types, and return kms till 100%.
+    
+    return fuelReq,tyreLife

@@ -1,0 +1,58 @@
+{
+	"4": {
+		"dryPerf": "5",
+		"wetPerf": "8",
+		"peakTemp": "18",
+		"durability": "7",
+		"warmupDistance": "6"
+	},
+	"8": {
+		"dryPerf": "2",
+		"wetPerf": "5",
+		"peakTemp": "14",
+		"durability": "8",
+		"warmupDistance": "3"
+	},
+	"6": {
+		"dryPerf": "8",
+		"wetPerf": "5",
+		"peakTemp": "32",
+		"durability": "8",
+		"warmupDistance": "6"
+	},
+	"3": {
+		"dryPerf": "5",
+		"wetPerf": "3",
+		"peakTemp": "21",
+		"durability": "4",
+		"warmupDistance": "5"
+	},
+	"7": {
+		"dryPerf": "8",
+		"wetPerf": "2",
+		"peakTemp": "13",
+		"durability": "1",
+		"warmupDistance": "1"
+	},
+	"5": {
+		"dryPerf": "7",
+		"wetPerf": "3",
+		"peakTemp": "24",
+		"durability": "6",
+		"warmupDistance": "2"
+	},
+	"1": {
+		"dryPerf": "3",
+		"wetPerf": "2",
+		"peakTemp": "34",
+		"durability": "1",
+		"warmupDistance": "7"
+	},
+	"2": {
+		"dryPerf": "4",
+		"wetPerf": "4",
+		"peakTemp": "27",
+		"durability": "3",
+		"warmupDistance": "4"
+	}
+}

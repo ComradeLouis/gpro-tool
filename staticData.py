@@ -1,31 +1,57 @@
 import json
 
 def lookup_static_data(track):
-    trackFile = open('trackData.json')
+    trackFile = open('dataFiles/trackData.json')
     staticTrackData = json.load(trackFile)
     trackDataInput = f'{track}'
     trackData = staticTrackData[trackDataInput]
-    partDataFile = open('partData.json')
+    partDataFile = open('dataFiles/partData.json')
     partData = json.load(partDataFile)    
-    fuelFile = open('fuelData.json')
+    fuelFile = open('dataFiles/fuelData.json')
     staticfuelData = json.load(fuelFile)
     fuelData = staticfuelData[trackDataInput]
 
     return trackData,partData,fuelData
 
-def lookup_tyre_suppliers(tyreId):
+def lookup_tyre_data(tyreId):
     
-    tyreSuppliers = {
-        '1': 'Pipirelli',
-        '9': 'Avonn',
-        '2': 'Yokomama',
-        '3': 'Dunnolop',
-        '8': 'Contimental',
-        '4': 'Badyear',
-        '7': 'Hancock',
-        '5': 'Michelini',
-        '6': 'Bridgerock'
+    tyreFile = open('dataFiles/tyreSupplierData.json')
+    tyreSuppliers = json.load(tyreFile)
+    tyreData = tyreSuppliers[f'{tyreId}']
+    
+    return tyreData
+
+def lookup_tyre_life(tyreDurability):
+    
+    durabilityFile = open('dataFiles/tyreDurabilityData.json')
+    durabilityData = json.load(durabilityFile)
+    tyreDurabilityData = durabilityData[f'{tyreDurability}']
+    
+    return tyreDurabilityData
+
+def lookup_wear_coeffs(trackWear,raceTemp,raceHumidity,tyre):
+    tempFile = open('dataFiles/tempData.json')
+    tempData = json.load(tempFile)
+    trackData = {
+        'Very Low':'1.085',
+        'Low':'0.914',
+        'Medium':'0.816',
+        'High':'0.745',
+        'Very High':'0.665'
     }
-    tyreSupplier = tyreSuppliers[f'{tyreId}']
+    humFile = open('dataFiles/humData.json')
+    humData = json.load(humFile)
+    ctData = {
+        'hard':'0.004',
+        'rain':'0.004',
+        'medium':'0.003',
+        'soft':'0.0021',
+        'xsoft':'0.0012'
+    }
     
-    return tyreSupplier
+    tempCoeff = float(tempData[f'{raceTemp}'])
+    trackCoeff = float(trackData[f'{trackWear}'])
+    humCoeff = float(humData[f'{raceHumidity}'])
+    ctCoeff = float(ctData[f'{tyre}'])
+    
+    return tempCoeff,trackCoeff,humCoeff,ctCoeff

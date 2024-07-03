@@ -1,5 +1,5 @@
 import requests
-from staticData import lookup_tyre_suppliers
+from staticData import lookup_tyre_data
 from dotenv import load_dotenv
 import os
 
@@ -18,9 +18,9 @@ def get_next_track():
     fuelConsumption = trackProfile['fuelConsumption']
     tyreWear = trackProfile['tyreWear']
     
-    trackData = {"trackName":trackName,"power":trackPower,"accel":trackAccel,"handling":trackHandl,"raceDistance":float(raceDistance),"laps":raceLaps,"pitTime":pitTime,'fuelConsumption':fuelConsumption,'tyreWear':tyreWear}
+    trackInfo = {"trackName":trackName,"power":trackPower,"accel":trackAccel,"handling":trackHandl,"raceDistance":float(raceDistance),"laps":raceLaps,"pitTime":pitTime,'fuelConsumption':fuelConsumption,'tyreWear':tyreWear}
 
-    return trackData
+    return trackInfo
 
 def get_driver_info():
     endpoint = f"{path}DriProfile"
@@ -86,12 +86,12 @@ def get_office_data():
     
     tyreSupplierId = officeData['tyreSupplierId']
     
-    tyreSupplier = lookup_tyre_suppliers(tyreSupplierId)
+    tyreData = lookup_tyre_data(tyreSupplierId)
     season = officeData['seasonNb']
     race = officeData['raceNb']
     
     officeResponse = {
-        'tyreSupplier':tyreSupplier,
+        'tyreData':tyreData,
         'season':season,
         'race':race
     }
