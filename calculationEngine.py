@@ -111,7 +111,6 @@ def find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData):
             maxTyreLife = math.floor(baseTyreLife*wearCoeff)
             calcTyreLife[f'{tyre}'] = maxTyreLife
         CTTyreLife[f'{CT}'] = calcTyreLife 
-        print(CTTyreLife)
         tyreLife = CTTyreLife
 # todo - function to calculate first three coeffs - decision on CT coeff neede:
 # =
