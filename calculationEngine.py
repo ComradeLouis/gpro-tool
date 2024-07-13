@@ -120,8 +120,17 @@ def calculate_part_wear(trackInfo,driverInfo):
     trackWearData = lookup_car_wear_coeffs(trackInfo['trackName'])
     CTRisk = ['0','10','20','30','40','50','60','70','80','90','100']
     partWear = []
+    CTPartWear = {}
     
     for CT in CTRisk:
         calcPartWear = {}
         for part in trackWearData:
-            
+            trackCoeff = trackWearData[f'{part}']
+            driverCoeff = #calculation
+            CTCoeff = #calculation
+            partWear = #insert calculation here
+            calcPartWear[f'{part}'] = partWear
+        CTPartWear[f'{CT}'] = calcPartWear
+        partWear = CTPartWear
+    
+    return partWear
