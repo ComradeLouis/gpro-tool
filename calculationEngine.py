@@ -1,5 +1,5 @@
 import math
-from staticData import lookup_tyre_life, lookup_wear_coeffs
+from staticData import *
 
 def calculate_setup(driverInfo,carData,weather,trackData,partData):
     
@@ -91,6 +91,7 @@ def find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData):
     fuelCoeff = float(fuelData[engineLvl])
     fuelConsumption = fuelCoeff*1.05
     fuelReq = math.ceil(fuelConsumption * trackInfo['raceDistance'])
+    fuelReqPerLap = fuelReq/trackInfo['laps']
     tyreDurability = officeData['tyreData']['durability']
     tyreDurabilityData = lookup_tyre_life(tyreDurability)
     tyreLife = []
@@ -112,4 +113,15 @@ def find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData):
         CTTyreLife[f'{CT}'] = calcTyreLife 
         tyreLife = CTTyreLife
     
-    return fuelReq,tyreLife
+    return fuelReq,fuelReqPerLap,tyreLife
+
+def calculate_part_wear(trackInfo,driverInfo):
+    
+    trackWearData = lookup_car_wear_coeffs(trackInfo['trackName'])
+    CTRisk = ['0','10','20','30','40','50','60','70','80','90','100']
+    partWear = []
+    
+    for CT in CTRisk:
+        calcPartWear = {}
+        for part in trackWearData:
+            

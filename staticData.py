@@ -55,3 +55,11 @@ def lookup_wear_coeffs(trackWear,raceTemp,raceHumidity,tyre):
     ctCoeff = float(ctData[f'{tyre}'])
     
     return tempCoeff,trackCoeff,humCoeff,ctCoeff
+
+def lookup_car_wear_coeffs(track):
+    carFile = open('dataFiles/trackWearData.json')
+    wearData = json.load(carFile)
+    
+    trackWear = wearData[f'{track}']
+    
+    return trackWear
