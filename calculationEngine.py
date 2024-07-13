@@ -138,3 +138,29 @@ def calculate_part_wear(trackInfo,driverInfo,carInfo):
         partWear = CTPartWear
     
     return partWear
+
+def calculate_TCD(track,weather):
+    
+    k = lookup_k_value(track)
+    Q1Temp = weather['Q1Weather']
+    Q2Temp = weather['Q2Weather']
+    raceTemp = math.ceil((weather['raceQ1TempLow']+weather['raceQ1TempHigh']+weather['raceQ3TempLow']+weather['raceQ2TempHigh']+weather['raceQ4TempLow']+weather['raceQ4TempHigh'])/6)
+    
+    temps = [Q1Temp,Q2Temp,raceTemp]
+    TCDSession = []
+    
+    for temp in temps:
+        calcTCD = (50-float(temp))*k
+        TCDSession.append(calcTCD)
+        
+    Q1TCD = TCDSession[0]
+    Q2TCD = TCDSession[1]
+    raceTCD = TCDSession[2]
+    
+    TCD = {
+        'Q1':Q1TCD,
+        'Q2':Q2TCD,
+        'Race':raceTCD
+    }
+    
+    return TCD

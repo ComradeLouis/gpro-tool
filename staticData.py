@@ -63,3 +63,11 @@ def lookup_car_wear_coeffs(track):
     trackWear = wearData[f'{track}']
     
     return trackWear
+
+def lookup_k_value(track):
+    kFile = open('dataFiles/kData.json')
+    kData = json.load(kFile)
+    
+    k = kData[f'{track}']
+    
+    return k
