@@ -115,20 +115,24 @@ def find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData):
     
     return fuelReq,fuelReqPerLap,tyreLife
 
-def calculate_part_wear(trackInfo,driverInfo):
+def calculate_part_wear(trackInfo,driverInfo,carInfo):
     
     trackWearData = lookup_car_wear_coeffs(trackInfo['trackName'])
     CTRisk = ['0','10','20','30','40','50','60','70','80','90','100']
     partWear = []
     CTPartWear = {}
     
+    
     for CT in CTRisk:
         calcPartWear = {}
         for part in trackWearData:
+            partLevel = float(carInfo['carPartLevels'][f'{part}'])
+            partCoeff = (1145*partLevel**0 - 2125.6369047224*partLevel**1 + 1957.20783726254*partLevel**2 - 1010.67708331277*partLevel**3 + 311.290798604758*partLevel**4 - 58.2916666654791*partLevel**5 + 6.49131944431256*partLevel**6 - 0.394345238087242*partLevel**7 + 0.0100446428569394*partLevel**8)/10000
             trackCoeff = trackWearData[f'{part}']
-            driverCoeff = #calculation
-            CTCoeff = #calculation
-            partWear = #insert calculation here
+            driverCoeff = (1+(driverInfo['concentration']*0.0008))*(1+(driverInfo['talent']*0.0004))*(1+(driverInfo['experience']*0.0006))*(1+(driverInfo['stamina']*0.0002))
+            aggCoeff = (1+(driverInfo['aggressiveness']*0.0006))
+            CTCoeff = 1 + (float(CT)*partCoeff)
+            partWear = math.ceil((trackCoeff*aggCoeff*CTCoeff)/driverCoeff)
             calcPartWear[f'{part}'] = partWear
         CTPartWear[f'{CT}'] = calcPartWear
         partWear = CTPartWear
