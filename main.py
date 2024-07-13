@@ -13,7 +13,7 @@ officeData = get_office_data()
 #calculate setup, fuel/tyre usage and part wear
 setup = (calculate_setup(driverInfo,carData,weather,trackData,partData))
 fuelRequired,fuelPerLap,tyreLife = (find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData))
-setupAndFuel = {'setup': setup, 'fuel': fuelRequired, 'fuelPerLap':fuelPerLap,'raceDistance':trackInfo['raceDistance'],'tyres': tyreLife}
+setupAndFuel = {'setup': setup, 'fuel': fuelRequired, 'fuelPerLap': fuelPerLap,'raceDistance': trackInfo['raceDistance'],'tyres': tyreLife}
 carPartWear = calculate_part_wear(trackInfo,driverInfo)
 
 #write output json files
