@@ -142,8 +142,8 @@ def calculate_part_wear(trackInfo,driverInfo,carInfo):
 def calculate_TCD(track,weather):
     
     k = lookup_k_value(track)
-    Q1Temp = weather['Q1Weather']
-    Q2Temp = weather['Q2Weather']
+    Q1Temp = weather['q1Temp']
+    Q2Temp = weather['q2Temp']
     raceTemp = math.ceil((weather['raceQ1TempLow']+weather['raceQ1TempHigh']+weather['raceQ3TempLow']+weather['raceQ2TempHigh']+weather['raceQ4TempLow']+weather['raceQ4TempHigh'])/6)
     
     temps = [Q1Temp,Q2Temp,raceTemp]
@@ -164,3 +164,51 @@ def calculate_TCD(track,weather):
     }
     
     return TCD
+
+def calculate_time_loss(trackInfo,weather,tyreLife,fuelRequired):
+    
+    TCD = calculate_TCD(trackInfo['trackName'],weather)
+    raceTCD = TCD['Race']
+    lapLength = trackInfo['raceDistance']/float(trackInfo['laps'])
+    lapLossCoeff = lapLength*0.0041181841
+    tyreLoss = {}
+    tyreTyreLoss = {}
+    fuelLoss = {}
+    fuelCalcLoss = {}
+    stopLoss = {}
+    stopCalcLoss = {}
+    
+    tyreCoeffs = {
+        'xsoft':1,
+        'soft':2,
+        'medium':3,
+        'hard':4,
+        'rain':4
+    }
+    
+    tyres = ['xsoft','soft','medium','hard','rain']
+    
+    for tyre in tyres:
+        calcTyreLoss = raceTCD*float(tyreCoeffs[f'{tyre}'])*float(trackInfo['laps'])
+        if tyre == 'rain':
+            calcTyreLoss = raceTCD*float(tyreCoeffs[f'{tyre}']) + 2.718*float(trackInfo['laps'])
+        tyreTyreLoss[f'{tyre}'] = calcTyreLoss
+        tyreLoss = tyreTyreLoss
+    
+    stops = [1,2,3,4]
+    
+    for stop in stops:
+        calcFuelLoss = ((lapLossCoeff*fuelRequired)/(1+float(stop)))*((float(trackInfo['laps']))/(1+float(stop))*(1+float(stop)))
+        fuelCalcLoss[f'{stop}'] = calcFuelLoss
+        fuelLoss = fuelCalcLoss
+        calcStopLoss = (float(trackInfo['pitTime'])*float(stop)) + (25*float(stop))
+        stopCalcLoss[f'{stop}'] = calcStopLoss
+        stopLoss = stopCalcLoss
+        
+    totalLoss = {
+        'tyres': tyreLoss,
+        'fuel': fuelLoss,
+        'stops': stopLoss
+    }
+    
+    return totalLoss

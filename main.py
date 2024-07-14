@@ -15,6 +15,7 @@ setup = (calculate_setup(driverInfo,carData,weather,trackData,partData))
 fuelRequired,fuelPerLap,tyreLife = (find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData))
 setupAndFuel = {'setup': setup, 'fuel': fuelRequired, 'fuelPerLap': fuelPerLap,'raceDistance': trackInfo['raceDistance'],'tyres': tyreLife}
 carPartWear = calculate_part_wear(trackInfo,driverInfo,carData)
+totalLoss = calculate_time_loss(trackInfo,weather,tyreLife,fuelRequired)
 
 #write output json files
 setup_file = f"{trackInfo['trackName']}_R{officeData['race']}_setup.json"
@@ -23,3 +24,6 @@ write_json(setup_path,setup_file,setupAndFuel)
 wear_file = f"{trackInfo['trackName']}_R{officeData['race']}_wear.json"
 wear_path = f'output/S{officeData['season']}_wear'
 write_json(wear_path,wear_file,carPartWear)
+loss_file = f"{trackInfo['trackName']}_R{officeData['race']}_loss.json"
+loss_path = f'output/S{officeData['season']}_loss'
+write_json(loss_path,loss_file,totalLoss)
