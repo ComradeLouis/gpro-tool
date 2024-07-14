@@ -8,4 +8,6 @@ To use this yourself - create the API token as explained on above website (throu
 
 -- Added 13/07 - part wear calcs per CT risk chosen (steps of 10)
 
-To be added - TCD calculation, strategy calculations (time loss from tyre choice, fuel load, time per added stop etc)
+-- Added 14/07 - TCD calculation and time loss from tyres/fuel/stops
+
+To be added - strategy calculations (time loss from tyre choice, fuel load, time per added stop etc). These will output an optimum strategy per ct risk
