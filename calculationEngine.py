@@ -257,7 +257,7 @@ def calculate_best_strategy(fuelRequired,tyreLife,trackInfo,weather,fuelPerLap):
                stratTimeLoss = stratLoss[f'{stop}'][f'{CT}'][f'{tyre}']
                if stratTimeLoss < timeLoss:
                    timeLoss = stratTimeLoss
-                   bestStrat = {'Time':timeLoss,'Stops':stop,'CT':CT,'Tyres':tyre,'Laps per stint':stintLaps,'Fuel per stint':stintFuel}
+                   bestStrat = {'Time':round(timeLoss,1),'Stops':stop,'CT':CT,'Tyres':tyre,'Laps per stint':stintLaps,'Fuel per stint':stintFuel,'Fuel per lap':round(fuelPerLap,3)}
                 
    
     return stratLoss,bestStrat
