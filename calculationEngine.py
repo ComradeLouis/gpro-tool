@@ -165,7 +165,7 @@ def calculate_TCD(track,weather):
     
     return TCD
 
-def calculate_time_loss(trackInfo,weather,tyreLife,fuelRequired):
+def calculate_time_loss(trackInfo,weather,fuelRequired):
     
     TCD = calculate_TCD(trackInfo['trackName'],weather)
     raceTCD = TCD['Race']
@@ -212,3 +212,38 @@ def calculate_time_loss(trackInfo,weather,tyreLife,fuelRequired):
     }
     
     return totalLoss
+
+def calculate_best_strategy(fuelRequired,tyreLife,trackInfo,weather):
+    
+    totalLoss = calculate_time_loss(trackInfo,weather,fuelRequired)
+    tyreLoss = totalLoss['tyres']
+    fuelLoss = totalLoss['fuel']
+    stopLoss = totalLoss['stops']
+    raceLaps = float(trackInfo['laps'])
+    chosenStopLoss = {}
+    stratLoss = []
+    
+    stops = [1,2,3,4]
+    tyres = ['xsoft','soft','medium','hard','rain']
+    CTRisk = ['0','10','20','30','40','50','60','70','80','90','100']
+    
+    for stop in stops:
+        chosenCTLoss = {}
+        stintLaps = math.ceil(raceLaps/(stop+1))
+        stintLength = (stintLaps/raceLaps)*trackInfo['raceDistance']
+        calcStopLoss = stopLoss[f'{stop}']
+        calcFuelLoss = fuelLoss[f'{stop}']
+        for CT in CTRisk:
+            chosenTyreLoss = {}
+            for tyre in tyres:
+                chosenTyreLife = tyreLife[f'{CT}'][f'{tyre}']
+                calcTyreLoss = tyreLoss[f'{tyre}']
+                calcCTTyreStopLoss = calcTyreLoss + calcFuelLoss + calcStopLoss
+                if stintLength > chosenTyreLife:
+                    calcCTTyreStopLoss = 1e7
+                chosenTyreLoss[f'{tyre}'] = calcCTTyreStopLoss
+            chosenCTLoss[f'{CT}'] = chosenTyreLoss
+        chosenStopLoss[f'{stop}'] = chosenCTLoss
+        stratLoss = chosenStopLoss
+    
+    return stratLoss
