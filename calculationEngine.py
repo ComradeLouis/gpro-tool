@@ -229,8 +229,8 @@ def calculate_best_strategy(fuelRequired,tyreLife,trackInfo,weather,fuelPerLap):
     
     for stop in stops:
         chosenCTLoss = {}
-        stintLaps = math.ceil(raceLaps/(stop+1))
-        stintLength = (stintLaps/raceLaps)*trackInfo['raceDistance']
+        stintHighLaps = math.ceil(raceLaps/(stop+1))
+        stintLength = (stintHighLaps/raceLaps)*trackInfo['raceDistance']
         calcStopLoss = stopLoss[f'{stop}']
         calcFuelLoss = fuelLoss[f'{stop}']
         for CT in CTRisk:
@@ -250,14 +250,16 @@ def calculate_best_strategy(fuelRequired,tyreLife,trackInfo,weather,fuelPerLap):
     reversedCTRisk = CTRisk[::-1]
     
     for stop in stops:
-       stintLaps = math.ceil(raceLaps/(stop+1))
-       stintFuel = math.ceil(stintLaps*fuelPerLap)
+       stintHighLaps = math.ceil(raceLaps/(stop+1))
+       stintHighFuel = math.ceil(stintHighLaps*fuelPerLap)
+       stintLowLaps = math.floor(raceLaps/(stop+1))
+       stintLowFuel = math.floor(stintLowLaps*fuelPerLap)
        for CT in reversedCTRisk:
            for tyre in tyres:
                stratTimeLoss = stratLoss[f'{stop}'][f'{CT}'][f'{tyre}']
                if stratTimeLoss < timeLoss:
                    timeLoss = stratTimeLoss
-                   bestStrat = {'Time':round(timeLoss,1),'Stops':stop,'CT':CT,'Tyres':tyre,'Laps per stint':stintLaps,'Fuel per stint':stintFuel,'Fuel per lap':round(fuelPerLap,3)}
+                   bestStrat = {'Time':round(timeLoss,1),'Stops':stop,'CT':CT,'Tyres':tyre,'High laps per stint':stintHighLaps,'Low laps per stint':stintLowLaps,'High fuel per stint':stintHighFuel,'Low fuel per stint':stintLowFuel,'Fuel per lap':round(fuelPerLap,3)}
                 
    
     return stratLoss,bestStrat
