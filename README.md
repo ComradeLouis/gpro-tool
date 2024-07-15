@@ -8,6 +8,6 @@ To use this yourself - create the API token as explained on above website (throu
 
 -- Added 13/07 - part wear calcs per CT risk chosen (steps of 10)
 
--- Added 14/07 - TCD calculation and time loss from tyres/fuel/stops
+-- Added 14/07 - TCD calculation and time loss from tyres/fuel/stops. Added full strategy calculations (time loss from tyre choice, fuel load, time per added stop etc). These will output an optimum strategy.
 
-To be added - strategy calculations (time loss from tyre choice, fuel load, time per added stop etc). These will output an optimum strategy per ct risk
+-- Added 15/07 - Created .exe file (gpro-tool.exe) - which can be run to do the entire program. Output JSON files will be in the "output" folder.
