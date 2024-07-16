@@ -211,11 +211,11 @@ def calculate_time_loss(trackInfo,weather,fuelRequired):
         'stops': stopLoss
     }
     
-    return totalLoss
+    return totalLoss,raceTCD
 
 def calculate_best_strategy(fuelRequired,tyreLife,trackInfo,weather,fuelPerLap):
     
-    totalLoss = calculate_time_loss(trackInfo,weather,fuelRequired)
+    totalLoss,raceTCD = calculate_time_loss(trackInfo,weather,fuelRequired)
     tyreLoss = totalLoss['tyres']
     fuelLoss = totalLoss['fuel']
     stopLoss = totalLoss['stops']
@@ -259,7 +259,7 @@ def calculate_best_strategy(fuelRequired,tyreLife,trackInfo,weather,fuelPerLap):
                stratTimeLoss = stratLoss[f'{stop}'][f'{CT}'][f'{tyre}']
                if stratTimeLoss < timeLoss:
                    timeLoss = stratTimeLoss
-                   bestStrat = {'Time':round(timeLoss,1),'Stops':stop,'CT':CT,'Tyres':tyre,'High laps per stint':stintHighLaps,'Low laps per stint':stintLowLaps,'High fuel per stint':stintHighFuel,'Low fuel per stint':stintLowFuel,'Fuel per lap':round(fuelPerLap,3)}
+                   bestStrat = {'Time':round(timeLoss,1),'Stops':stop,'CT':CT,'Tyres':tyre,'TCD':round(raceTCD,3),'High laps per stint':stintHighLaps,'Low laps per stint':stintLowLaps,'High fuel per stint':stintHighFuel,'Low fuel per stint':stintLowFuel,'Fuel per lap':round(fuelPerLap,3)}
                 
    
     return stratLoss,bestStrat
