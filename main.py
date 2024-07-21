@@ -14,9 +14,9 @@ officeData = get_office_data()
 setup = (calculate_setup(driverInfo,carData,weather,trackData,partData))
 fuelRequired,fuelPerLap,tyreLife = (find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData))
 setupAndFuel = {'setup': setup, 'tyres': tyreLife}
-carPartWear = calculate_part_wear(trackInfo,driverInfo,carData)
+totalWear = calculate_part_wear(trackInfo,driverInfo,carData)
 totalLoss,raceTCD = calculate_time_loss(trackInfo,weather,fuelRequired)
 stratLoss,bestStrat = calculate_best_strategy(fuelRequired,tyreLife,trackInfo,weather,fuelPerLap)
 
 #write output json files
-create_outputs(trackInfo,officeData,setupAndFuel,carPartWear,totalLoss,bestStrat,stratLoss)
+create_outputs(trackInfo,officeData,setupAndFuel,totalWear,totalLoss,bestStrat,stratLoss)
