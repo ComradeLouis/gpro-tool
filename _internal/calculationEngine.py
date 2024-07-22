@@ -25,7 +25,8 @@ def calculate_setup(driverInfo,carData,weather,trackData,partData):
             setup_offset_susp = setup_offset_susp + (partData['susp'][7]*weather[session]) + partData['susp'][8]
 
         Qsetup = {
-            'wings': math.ceil(trackData['wings']+setup_offset_wings),
+            'FWing': math.ceil(trackData['wings']+setup_offset_wings),
+            'RWing': math.ceil(trackData['wings']+setup_offset_wings),
             'engine': math.ceil(trackData['engine']+setup_offset_engine),
             'brakes': math.ceil(trackData['brakes']+setup_offset_brakes),
             'gear': math.ceil(trackData['gear']+setup_offset_gear),
@@ -52,7 +53,8 @@ def calculate_setup(driverInfo,carData,weather,trackData,partData):
     setup_offset_susp = (partData['susp'][0]*raceTemp)+(partData['susp'][1]*carData['carPartWear']['susp'])+(partData['susp'][2]*driverInfo['experience'])+(partData['susp'][3]*driverInfo['weight'])+(partData['susp'][4]*carData['carPartLevels']['susp'])+(partData['susp'][5]*carData['carPartLevels']['chassis'])+(partData['susp'][6]*carData['carPartLevels']['underbody'])
 
     Race_setup_dry = {
-        'wings': math.ceil(trackData['wings']+setup_offset_wings),
+        'FWing': math.ceil(trackData['wings']+setup_offset_wings),
+        'RWing': math.ceil(trackData['wings']+setup_offset_wings),
         'engine': math.ceil(trackData['engine']+setup_offset_engine),
         'brakes': math.ceil(trackData['brakes']+setup_offset_brakes),
         'gear': math.ceil(trackData['gear']+setup_offset_gear),
@@ -66,7 +68,8 @@ def calculate_setup(driverInfo,carData,weather,trackData,partData):
     setup_offset_susp = setup_offset_susp + (partData['susp'][7]*raceTemp) + partData['susp'][8]
 
     Race_setup_wet = {
-        'wings': math.ceil(trackData['wings']+setup_offset_wings),
+        'FWing': math.ceil(trackData['wings']+setup_offset_wings),
+        'RWing': math.ceil(trackData['wings']+setup_offset_wings),
         'engine': math.ceil(trackData['engine']+setup_offset_engine),
         'brakes': math.ceil(trackData['brakes']+setup_offset_brakes),
         'gear': math.ceil(trackData['gear']+setup_offset_gear),
@@ -75,13 +78,13 @@ def calculate_setup(driverInfo,carData,weather,trackData,partData):
 
     raceSetup = {
         'Dry Race': Race_setup_dry,
-        'Rain Chance': wetPercent,
         'Wet Race': Race_setup_wet
     }
 
     setup = {
         'Qualy': qualySetup,
-        'Race': raceSetup
+        'Race': raceSetup,
+        'Rain Chance': wetPercent
     }
 
     return setup
