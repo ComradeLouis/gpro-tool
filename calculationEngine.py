@@ -239,39 +239,62 @@ def calculate_best_strategy(fuelRequired,tyreLife,trackInfo,weather,fuelPerLap):
     tyres = ['xsoft','soft','medium','hard','rain']
     CTRisk = ['0','10','20','30','40','50','60','70','80','90','100']
 
+    all_strategies = []
+
     for stop in stops:
-        chosenCTLoss = {}
-        stintHighLaps = math.ceil(raceLaps/(stop+1))
-        stintLength = (stintHighLaps/raceLaps)*trackInfo['raceDistance']
+        stintHighLaps = math.ceil(raceLaps / (stop + 1))
+        stintLength = (stintHighLaps / raceLaps) * trackInfo['raceDistance']
         calcStopLoss = stopLoss[f'{stop}']
         calcFuelLoss = fuelLoss[f'{stop}']
+
         for CT in CTRisk:
-            chosenTyreLoss = {}
             for tyre in tyres:
                 chosenTyreLife = tyreLife[f'{CT}'][f'{tyre}']
                 calcTyreLoss = tyreLoss[f'{tyre}']
                 calcCTTyreStopLoss = calcTyreLoss + calcFuelLoss + calcStopLoss
+
                 if stintLength > chosenTyreLife:
-                    calcCTTyreStopLoss = 1e7
-                chosenTyreLoss[f'{tyre}'] = calcCTTyreStopLoss
-            chosenCTLoss[f'{CT}'] = chosenTyreLoss
-        chosenStopLoss[f'{stop}'] = chosenCTLoss
-        stratLoss = chosenStopLoss
+                    calcCTTyreStopLoss = 1e7  # Penalty for exceeding tyre life
+                
+                stintHighLaps = math.ceil(raceLaps/(stop+1))
+                stintHighFuel = math.ceil(stintHighLaps*fuelPerLap)
+                stintLowLaps = math.floor(raceLaps/(stop+1))
+                stintLowFuel = math.floor(stintLowLaps*fuelPerLap)
 
-    timeLoss = 1e7
-    reversedCTRisk = CTRisk[::-1]
+            # Append strategy and its loss to the list
+                all_strategies.append({
+                    'stop': stop,
+                    'Max CT': int(CT),
+                    'tyre': tyre,
+                    'loss': calcCTTyreStopLoss,
+                    'TCD':round(raceTCD,3),
+                    'Fuel per lap':round(fuelPerLap,3),
+                    'High laps per stint':stintHighLaps,
+                    'Low laps per stint':stintLowLaps,
+                    'High fuel per stint':stintHighFuel,
+                    'Low fuel per stint':stintLowFuel
+                })
 
-    for stop in stops:
-       stintHighLaps = math.ceil(raceLaps/(stop+1))
-       stintHighFuel = math.ceil(stintHighLaps*fuelPerLap)
-       stintLowLaps = math.floor(raceLaps/(stop+1))
-       stintLowFuel = math.floor(stintLowLaps*fuelPerLap)
-       for CT in reversedCTRisk:
-           for tyre in tyres:
-               stratTimeLoss = stratLoss[f'{stop}'][f'{CT}'][f'{tyre}']
-               if stratTimeLoss < timeLoss:
-                   timeLoss = stratTimeLoss
-                   bestStrat = {'Time':round(timeLoss,1),'Stops':stop,'CT':CT,'Tyres':tyre,'TCD':round(raceTCD,3),'High laps per stint':stintHighLaps,'Low laps per stint':stintLowLaps,'High fuel per stint':stintHighFuel,'Low fuel per stint':stintLowFuel,'Fuel per lap':round(fuelPerLap,3)}
+# Sort strategies by loss
+    sorted_strategies = sorted(all_strategies, key=lambda x: (x['loss'], -x['Max CT']))
 
+# Select the best strategy
+    best_strategy = sorted_strategies[0]
 
-    return stratLoss,bestStrat
+# Select the second best strategy with different stops and tyres
+    second_best_strategy = None
+    for strategy in sorted_strategies:
+        if strategy['stop'] != best_strategy['stop'] and strategy['tyre'] != best_strategy['tyre']:
+            second_best_strategy = strategy
+            break
+    
+    third_best_strategy = None
+    for strategy in sorted_strategies:
+        if (strategy['stop'] != best_strategy['stop'] and strategy['tyre'] != best_strategy['tyre'] and
+            strategy['stop'] != second_best_strategy['stop'] and strategy['tyre'] != second_best_strategy['tyre']):
+            third_best_strategy = strategy
+            break
+        
+    topThreeStrats = [best_strategy,second_best_strategy,third_best_strategy]
+
+    return topThreeStrats
