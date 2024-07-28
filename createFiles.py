@@ -10,7 +10,7 @@ def write_json(target_path, target_file, data):
     with open(os.path.join(target_path, target_file), 'w') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
         
-def create_outputs(trackInfo,officeData,setupAndFuel,carPartWear,totalLoss,bestStrat):
+def create_outputs(trackInfo,officeData,setupAndFuel,carPartWear,totalLoss,bestStrat,testWear):
     
     setup_file = f"{trackInfo['trackName']}_R{officeData['race']}_setup.json"
     setup_path = f'output/rawData/S{officeData['season']}_setups'
@@ -24,6 +24,9 @@ def create_outputs(trackInfo,officeData,setupAndFuel,carPartWear,totalLoss,bestS
     beststrat_file = f"{trackInfo['trackName']}_R{officeData['race']}_idealstrat.json"
     beststrat_path = f'output/rawData/S{officeData['season']}_strat'
     write_json(beststrat_path,beststrat_file,bestStrat)
+    testWear_file = f"{trackInfo['trackName']}_R{officeData['race']}_testWear.json"
+    testWear_path = f'output/rawData/S{officeData['season']}_testWear'
+    write_json(testWear_path,testWear_file,testWear)
     
     allData = {'1':setupAndFuel,'2':bestStrat,'3':carPartWear}
     allData_file = f'{trackInfo['trackName']}_R{officeData['race']}.xlsx'

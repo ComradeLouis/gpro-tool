@@ -298,3 +298,23 @@ def calculate_best_strategy(fuelRequired,tyreLife,trackInfo,weather,fuelPerLap):
     topThreeStrats = [best_strategy,second_best_strategy,third_best_strategy]
 
     return topThreeStrats
+
+def calculate_test_wear(trackInfo,driverInfo,carInfo):
+
+    trackWearData = lookup_car_wear_coeffs(trackInfo['trackName'])
+    partWear = []
+    calcPartWear = {}
+    for part in trackWearData:
+        partLevel = float(carInfo['carPartLevels'][f'{part}'])
+        partCoeff = (1145*partLevel**0 - 2125.6369047224*partLevel**1 + 1957.20783726254*partLevel**2 - 1010.67708331277*partLevel**3 + 311.290798604758*partLevel**4 - 58.2916666654791*partLevel**5 + 6.49131944431256*partLevel**6 - 0.394345238087242*partLevel**7 + 0.0100446428569394*partLevel**8)/10000
+        trackCoeff = trackWearData[f'{part}']
+        driverCoeff = (1+(driverInfo['concentration']*0.0008))*(1+(driverInfo['talent']*0.0004))*(1+(driverInfo['experience']*0.0006))*(1+(driverInfo['stamina']*0.0002))
+        aggCoeff = (1+(driverInfo['aggressiveness']*0.0006))
+        CTCoeff = 1 + (0*partCoeff)
+        partTestWear = (trackCoeff*aggCoeff*CTCoeff)/(trackInfo['laps']*driverCoeff)
+        calcPartWear[f'{part}'] = partTestWear
+        partWear = calcPartWear
+
+    testWear = {'Test Wear per lap': partWear}
+
+    return testWear

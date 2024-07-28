@@ -18,5 +18,9 @@ totalWear = calculate_part_wear(trackInfo,driverInfo,carData)
 totalLoss,raceTCD = calculate_time_loss(trackInfo,weather,fuelRequired)
 topThreeStrats = calculate_best_strategy(fuelRequired,tyreLife,trackInfo,weather,fuelPerLap)
 
+#get testing data
+testingTrackInfo = get_testing_data()
+testWear = calculate_test_wear(testingTrackInfo,driverInfo,carData)
+
 #write output json files
-create_outputs(trackInfo,officeData,setupAndFuel,totalWear,totalLoss,topThreeStrats)
+create_outputs(trackInfo,officeData,setupAndFuel,totalWear,totalLoss,topThreeStrats,testWear)
