@@ -303,7 +303,9 @@ def calculate_test_wear(trackInfo,driverInfo,carInfo):
 
     trackWearData = lookup_car_wear_coeffs(trackInfo['trackName'])
     partWear = []
+    lapsPerPercent = []
     calcPartWear = {}
+    calcLapsWear = {}
     for part in trackWearData:
         partLevel = float(carInfo['carPartLevels'][f'{part}'])
         partCoeff = (1145*partLevel**0 - 2125.6369047224*partLevel**1 + 1957.20783726254*partLevel**2 - 1010.67708331277*partLevel**3 + 311.290798604758*partLevel**4 - 58.2916666654791*partLevel**5 + 6.49131944431256*partLevel**6 - 0.394345238087242*partLevel**7 + 0.0100446428569394*partLevel**8)/10000
@@ -313,8 +315,10 @@ def calculate_test_wear(trackInfo,driverInfo,carInfo):
         CTCoeff = 1 + (0*partCoeff)
         partTestWear = (trackCoeff*aggCoeff*CTCoeff)/(trackInfo['laps']*driverCoeff)
         calcPartWear[f'{part}'] = partTestWear
+        calcLapsWear[f'{part}'] = math.floor(1/partTestWear)
         partWear = calcPartWear
+        lapsPerPercent = calcLapsWear
 
-    testWear = {'Test Wear per lap': partWear}
+    testWear = {'Test Wear per lap': partWear, 'Laps per 1% wear':lapsPerPercent}
 
     return testWear

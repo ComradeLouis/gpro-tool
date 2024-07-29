@@ -11,3 +11,9 @@ To use this yourself - create the API token as explained on above website (throu
 -- Added 14/07 - TCD calculation and time loss from tyres/fuel/stops. Added full strategy calculations (time loss from tyre choice, fuel load, time per added stop etc). These will output an optimum strategy.
 
 -- Added 15/07 - Created .exe file (gpro-tool.exe) - which can be run to do the entire program. Output JSON files will be in the "output" folder.
+
+-- Added as of 28/07 - outputs top 3 strategies, excel sheet output with all data for race
+
+-- Added 29/07 - testing wear data
+
+To be added - calcluation of best testing stint length to minimise wear

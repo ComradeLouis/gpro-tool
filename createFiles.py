@@ -28,7 +28,7 @@ def create_outputs(trackInfo,officeData,setupAndFuel,carPartWear,totalLoss,bestS
     testWear_path = f'output/rawData/S{officeData['season']}_testWear'
     write_json(testWear_path,testWear_file,testWear)
     
-    allData = {'1':setupAndFuel,'2':bestStrat,'3':carPartWear}
+    allData = {'1':setupAndFuel,'2':bestStrat,'3':carPartWear,'4':testWear}
     allData_file = f'{trackInfo['trackName']}_R{officeData['race']}.xlsx'
     allData_path = f'output/S{officeData['season']}'
     write_excel(allData_path,allData_file,allData)
@@ -46,6 +46,7 @@ def write_excel(target_path,target_file, data):
     strategy = pd.DataFrame(data['2'])
     raceWear = pd.DataFrame(data['3']['Track Wear'])
     endOfRaceWear = pd.DataFrame(data['3']['End of Race Wear'])
+    testingWear = pd.DataFrame(data['4'])
     
     with pd.ExcelWriter(f'{target_path}\{target_file}') as writer:
         Qsetup.to_excel(writer,sheet_name="Qualy Setup",index=True)
@@ -53,3 +54,4 @@ def write_excel(target_path,target_file, data):
         strategy.to_excel(writer,sheet_name="Strategy",index=False)
         raceWear.to_excel(writer,sheet_name="Race Wear",index=True)
         endOfRaceWear.to_excel(writer,sheet_name="End of Race Wear",index=True)
+        testingWear.to_excel(writer,sheet_name="Testing Wear",index=True)
