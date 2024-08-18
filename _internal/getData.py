@@ -98,6 +98,31 @@ def get_office_data():
     
     return officeResponse
 
+def get_testing_data():
+    endpoint = f"{path}Testing"
+    headers = {"Authorization": f"Bearer {token}"}
+    testingData = requests.get(endpoint, headers=headers).json()
+    
+    endpoint2 = f"{path}TrackProfile"
+    params = {'id': f'{testingData['trackId']}'}
+    trackProfile = requests.get(endpoint2,params=params,headers=headers).json()
+    
+    trackName = trackProfile['trackName']
+    trackPower = trackProfile['power']
+    trackAccel = trackProfile['accel']
+    trackHandl = trackProfile['handl']
+    raceDistance = trackProfile['raceDistance']
+    raceLaps = trackProfile['laps']
+    pitTime = trackProfile['timeInOutPits']
+    fuelConsumption = trackProfile['fuelConsumption']
+    tyreWear = trackProfile['tyreWear']
+    
+    trackInfo = {"trackName":trackName,"power":trackPower,"accel":trackAccel,"handling":trackHandl,"raceDistance":float(raceDistance),"laps":raceLaps,"pitTime":pitTime,'fuelConsumption':fuelConsumption,'tyreWear':tyreWear}
+
+    
+    return trackInfo
+    
+
 load_dotenv()
 token = os.getenv('token')
 path = "https://gpro.net/gb/backend/api/v2/"

@@ -52,6 +52,14 @@ def write_excel(target_path,target_file, data):
         Qsetup.to_excel(writer,sheet_name="Qualy Setup",index=True)
         Rsetup.to_excel(writer,sheet_name="Race Setup",index=True)
         strategy.to_excel(writer,sheet_name="Strategy",index=False)
+        for column in strategy:
+            column_length = max(strategy[column].astype(str).map(len).max(), len(column))
+            col_idx = strategy.columns.get_loc(column)
+            writer.sheets['Strategy'].set_column(col_idx, col_idx, column_length)
         raceWear.to_excel(writer,sheet_name="Race Wear",index=True)
         endOfRaceWear.to_excel(writer,sheet_name="End of Race Wear",index=True)
         testingWear.to_excel(writer,sheet_name="Testing Wear",index=True)
+        for column in testingWear:
+            column_length = max(testingWear[column].astype(str).map(len).max(), len(column))
+            col_idx = testingWear.columns.get_loc(column)
+            writer.sheets['Testing Wear'].set_column(col_idx, col_idx, column_length)

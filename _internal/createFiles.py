@@ -10,7 +10,7 @@ def write_json(target_path, target_file, data):
     with open(os.path.join(target_path, target_file), 'w') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
         
-def create_outputs(trackInfo,officeData,setupAndFuel,carPartWear,totalLoss,bestStrat):
+def create_outputs(trackInfo,officeData,setupAndFuel,carPartWear,totalLoss,bestStrat,testWear):
     
     setup_file = f"{trackInfo['trackName']}_R{officeData['race']}_setup.json"
     setup_path = f'output/rawData/S{officeData['season']}_setups'
@@ -24,8 +24,11 @@ def create_outputs(trackInfo,officeData,setupAndFuel,carPartWear,totalLoss,bestS
     beststrat_file = f"{trackInfo['trackName']}_R{officeData['race']}_idealstrat.json"
     beststrat_path = f'output/rawData/S{officeData['season']}_strat'
     write_json(beststrat_path,beststrat_file,bestStrat)
+    testWear_file = f"{trackInfo['trackName']}_R{officeData['race']}_testWear.json"
+    testWear_path = f'output/rawData/S{officeData['season']}_testWear'
+    write_json(testWear_path,testWear_file,testWear)
     
-    allData = {'1':setupAndFuel,'2':bestStrat,'3':carPartWear}
+    allData = {'1':setupAndFuel,'2':bestStrat,'3':carPartWear,'4':testWear}
     allData_file = f'{trackInfo['trackName']}_R{officeData['race']}.xlsx'
     allData_path = f'output/S{officeData['season']}'
     write_excel(allData_path,allData_file,allData)
@@ -43,10 +46,20 @@ def write_excel(target_path,target_file, data):
     strategy = pd.DataFrame(data['2'])
     raceWear = pd.DataFrame(data['3']['Track Wear'])
     endOfRaceWear = pd.DataFrame(data['3']['End of Race Wear'])
+    testingWear = pd.DataFrame(data['4'])
     
     with pd.ExcelWriter(f'{target_path}\{target_file}') as writer:
         Qsetup.to_excel(writer,sheet_name="Qualy Setup",index=True)
         Rsetup.to_excel(writer,sheet_name="Race Setup",index=True)
         strategy.to_excel(writer,sheet_name="Strategy",index=False)
+        for column in strategy:
+            column_length = max(strategy[column].astype(str).map(len).max(), len(column))
+            col_idx = strategy.columns.get_loc(column)
+            writer.sheets['Strategy'].set_column(col_idx, col_idx, column_length)
         raceWear.to_excel(writer,sheet_name="Race Wear",index=True)
         endOfRaceWear.to_excel(writer,sheet_name="End of Race Wear",index=True)
+        testingWear.to_excel(writer,sheet_name="Testing Wear",index=True)
+        for column in testingWear:
+            column_length = max(testingWear[column].astype(str).map(len).max(), len(column))
+            col_idx = testingWear.columns.get_loc(column)
+            writer.sheets['Testing Wear'].set_column(col_idx, col_idx, column_length)

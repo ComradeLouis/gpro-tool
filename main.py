@@ -16,11 +16,11 @@ fuelRequired,fuelPerLap,tyreLife = (find_fuel_and_tyre_usage(fuelData,carData,tr
 setupAndFuel = {'setup': setup, 'tyres': tyreLife}
 totalWear = calculate_part_wear(trackInfo,driverInfo,carData)
 totalLoss,raceTCD = calculate_time_loss(trackInfo,weather,fuelRequired)
-topThreeStrats = calculate_best_strategy(fuelRequired,tyreLife,trackInfo,weather,fuelPerLap)
+sortedBestStrategies = calculate_best_strategy(fuelRequired,tyreLife,trackInfo,weather,fuelPerLap)
 
 #get testing data
 testingTrackInfo = get_testing_data()
 testWear = calculate_test_wear(testingTrackInfo,driverInfo,carData)
 
 #write output json files
-create_outputs(trackInfo,officeData,setupAndFuel,totalWear,totalLoss,topThreeStrats,testWear)
+create_outputs(trackInfo,officeData,setupAndFuel,totalWear,totalLoss,sortedBestStrategies,testWear)
