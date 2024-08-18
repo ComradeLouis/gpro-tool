@@ -20,7 +20,8 @@ sortedBestStrategies = calculate_best_strategy(fuelRequired,tyreLife,trackInfo,w
 
 #get testing data
 testingTrackInfo = get_testing_data()
-testWear = calculate_test_wear(testingTrackInfo,driverInfo,carData)
+testWear, testData = calculate_test_wear(testingTrackInfo,driverInfo,carData,fuelData,officeData)
 
-#write output json files
-create_outputs(trackInfo,officeData,setupAndFuel,totalWear,totalLoss,sortedBestStrategies,testWear)
+#write output files
+create_outputs(trackInfo,officeData,setupAndFuel,totalWear,totalLoss,sortedBestStrategies,testWear,testData)
+print(f'Requests remaining this race: {testingTrackInfo['reqRemaining']}')

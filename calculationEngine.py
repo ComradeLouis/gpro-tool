@@ -297,7 +297,7 @@ def calculate_best_strategy(fuelRequired, tyreLife, trackInfo, weather, fuelPerL
     return sorted_best_strategies
 
 
-def calculate_test_wear(trackInfo,driverInfo,carInfo):
+def calculate_test_wear(trackInfo,driverInfo,carInfo,fuelData,officeData):
 
     trackWearData = lookup_car_wear_coeffs(trackInfo['trackName'])
     partWear = []
@@ -316,7 +316,34 @@ def calculate_test_wear(trackInfo,driverInfo,carInfo):
         calcLapsWear[f'{part}'] = math.floor(1/partTestWear)
         partWear = calcPartWear
         lapsPerPercent = calcLapsWear
+    
+    engineLvl = str(int(carInfo['carPartLevels']['engine']))
+    fuelCoeff = float(fuelData[engineLvl])
+    fuelConsumption = fuelCoeff*1.05
+    fuelReq = math.ceil(fuelConsumption * trackInfo['raceDistance'])
+    fuelReqPerLap = fuelReq/trackInfo['laps']
+    tyreDurability = officeData['tyreData']['durability']
+    tyreDurabilityData = lookup_tyre_life(tyreDurability)
+    trackWear = trackInfo['tyreWear']
+    temp = trackInfo['temp']
+    humidity = trackInfo['hum']
+    
+    tyres = ['xsoft','soft','medium','hard','rain']
+    CT = 0
+    
+    calcTyreLife = {}
+    calcTyreLaps = {}
+    for tyre in tyres:
+        baseTyreLife = float(tyreDurabilityData[tyre])
+        trackCoeff,tempCoeff,humCoeff,ctCoeff = lookup_wear_coeffs(trackWear,temp,humidity,tyre)
+        wearCoeff = trackCoeff*tempCoeff*humCoeff*(1-(int(CT)*ctCoeff))
+        maxTyreLife = baseTyreLife*wearCoeff
+        calcTyreLife[f'{tyre}'] = math.floor(maxTyreLife)
+        calcTyreLaps[f'{tyre}'] = math.floor(maxTyreLife/(trackInfo['raceDistance']/trackInfo['laps']))
+    tyreLife = calcTyreLife
+    tyreLaps = calcTyreLaps
 
-    testWear = {'Test Wear per lap': partWear, 'Laps per 1% wear':lapsPerPercent}
+    testWear = {'Test Wear per lap': partWear, 'Laps per 1% wear': lapsPerPercent}
+    testData = {'Fuel Per Lap': round(fuelReqPerLap, 3), 'Tyre Life': tyreLife, 'Max Tyre Laps': tyreLaps}
 
-    return testWear
+    return testWear,testData
