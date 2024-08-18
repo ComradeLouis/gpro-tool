@@ -207,7 +207,7 @@ def calculate_time_loss(trackInfo,weather,fuelRequired):
         tyreTyreLoss[f'{tyre}'] = calcTyreLoss
         tyreLoss = tyreTyreLoss
 
-    stops = [1,2,3,4]
+    stops = [0,1,2,3,4]
 
     for stop in stops:
         calcFuelLoss = ((lapLossCoeff*fuelRequired)/(1+float(stop)))*((float(trackInfo['laps']))/(1+float(stop))*(1+float(stop)))
@@ -240,7 +240,7 @@ def calculate_best_strategy(fuelRequired, tyreLife, trackInfo, weather, fuelPerL
     best_strategies = {}
 
     # Define possible values for stops, tyres, and CT risk
-    stops = [1, 2, 3, 4]
+    stops = [0, 1, 2, 3, 4]
     tyres = ['xsoft', 'soft', 'medium', 'hard', 'rain']
     CTRisk = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60', '65', '70', '75', '80', '85', '90', '95', '100']
 
@@ -273,14 +273,14 @@ def calculate_best_strategy(fuelRequired, tyreLife, trackInfo, weather, fuelPerL
 
                 # Check if this strategy is better (lower loss or higher CT with same loss) than the current best for this combination
                 if (strategy_key not in best_strategies or
-                    calcCTTyreStopLoss < best_strategies[strategy_key]['loss'] or
-                    (calcCTTyreStopLoss == best_strategies[strategy_key]['loss'] and int(CT) > best_strategies[strategy_key]['Max CT'])):
+                    calcCTTyreStopLoss < best_strategies[strategy_key]['Total time loss'] or
+                    (calcCTTyreStopLoss == best_strategies[strategy_key]['Total time loss'] and int(CT) > best_strategies[strategy_key]['Max CT to 85% wear'])) and calcCTTyreStopLoss != 1e7:
 
                     best_strategies[strategy_key] = {
-                        'stop': stop,
-                        'Max CT': int(CT),
-                        'tyre': tyre,
-                        'loss': calcCTTyreStopLoss,
+                        'Number of stops': stop,
+                        'Max CT to 85% wear': int(CT),
+                        'Tyre choice': tyre,
+                        'Total time loss': round(calcCTTyreStopLoss, 0),
                         'TCD': round(raceTCD, 3),
                         'Fuel per lap': round(fuelPerLap, 3),
                         'High laps per stint': stintHighLaps,
@@ -291,7 +291,7 @@ def calculate_best_strategy(fuelRequired, tyreLife, trackInfo, weather, fuelPerL
                     }
 
     # Convert the dictionary of best strategies to a list and sort by loss (ascending)
-    sorted_best_strategies = sorted(best_strategies.values(), key=lambda x: (x['loss'], -x['Max CT']))
+    sorted_best_strategies = sorted(best_strategies.values(), key=lambda x: (x['Total time loss'], -x['Max CT to 85% wear']))
 
     # Return the list of the best strategies per stop/tyre combination
     return sorted_best_strategies
