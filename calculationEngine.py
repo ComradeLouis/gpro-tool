@@ -102,7 +102,7 @@ def find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData):
     raceTemp = math.ceil((weather['raceQ1TempLow']+weather['raceQ1TempHigh']+weather['raceQ3TempLow']+weather['raceQ2TempHigh']+weather['raceQ4TempLow']+weather['raceQ4TempHigh'])/6)
     raceHumidity = math.ceil((weather['raceQ1HumLow']+weather['raceQ1HumHigh']+weather['raceQ3HumLow']+weather['raceQ2HumHigh']+weather['raceQ4HumLow']+weather['raceQ4HumHigh'])/6)
     trackWear = trackInfo['tyreWear']
-    CTRisk = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60', '65', '70', '75', '80', '85', '90', '95', '100']
+    CTRisk = range(0,101)
     CTTyreLife = {}
 
     for CT in CTRisk:
@@ -121,7 +121,7 @@ def find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData):
 def calculate_part_wear(trackInfo,driverInfo,carInfo):
 
     trackWearData = lookup_car_wear_coeffs(trackInfo['trackName'])
-    CTRisk = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60', '65', '70', '75', '80', '85', '90', '95', '100']
+    CTRisk = range(0,101)
     partWear = []
     CTPartWear = {}
     maxWear = []
@@ -242,7 +242,7 @@ def calculate_best_strategy(fuelRequired, tyreLife, trackInfo, weather, fuelPerL
     # Define possible values for stops, tyres, and CT risk
     stops = [0, 1, 2, 3, 4]
     tyres = ['xsoft', 'soft', 'medium', 'hard', 'rain']
-    CTRisk = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60', '65', '70', '75', '80', '85', '90', '95', '100']
+    CTRisk = range(0,101)
 
     # Iterate over all possible combinations of stops, CT risk, and tyre choices
     for stop in stops:
