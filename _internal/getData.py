@@ -116,10 +116,12 @@ def get_testing_data():
     pitTime = trackProfile['timeInOutPits']
     fuelConsumption = trackProfile['fuelConsumption']
     tyreWear = trackProfile['tyreWear']
+    temp = testingData['temp']
+    hum = testingData['hum']
+    reqRemaining = trackProfile['apiRequestsRemaining']
     
-    trackInfo = {"trackName":trackName,"power":trackPower,"accel":trackAccel,"handling":trackHandl,"raceDistance":float(raceDistance),"laps":raceLaps,"pitTime":pitTime,'fuelConsumption':fuelConsumption,'tyreWear':tyreWear}
+    trackInfo = {"trackName":trackName,"power":trackPower,"accel":trackAccel,"handling":trackHandl,"raceDistance":float(raceDistance),"laps":raceLaps,"pitTime":pitTime,'fuelConsumption':fuelConsumption,'tyreWear':tyreWear, 'temp': temp,'hum': hum, 'reqRemaining': reqRemaining}
 
-    
     return trackInfo
     
 

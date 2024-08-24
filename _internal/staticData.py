@@ -6,7 +6,7 @@ def lookup_static_data(track):
     trackDataInput = f'{track}'
     trackData = staticTrackData[trackDataInput]
     partDataFile = open('dataFiles/partData.json')
-    partData = json.load(partDataFile)    
+    partData = json.load(partDataFile)
     fuelFile = open('dataFiles/fuelData.json')
     staticfuelData = json.load(fuelFile)
     fuelData = staticfuelData[trackDataInput]
@@ -14,19 +14,19 @@ def lookup_static_data(track):
     return trackData,partData,fuelData
 
 def lookup_tyre_data(tyreId):
-    
+
     tyreFile = open('dataFiles/tyreSupplierData.json')
     tyreSuppliers = json.load(tyreFile)
     tyreData = tyreSuppliers[f'{tyreId}']
-    
+
     return tyreData
 
 def lookup_tyre_life(tyreDurability):
-    
+
     durabilityFile = open('dataFiles/tyreDurabilityData.json')
     durabilityData = json.load(durabilityFile)
     tyreDurabilityData = durabilityData[f'{tyreDurability}']
-    
+
     return tyreDurabilityData
 
 def lookup_wear_coeffs(trackWear,raceTemp,raceHumidity,tyre):
@@ -37,7 +37,7 @@ def lookup_wear_coeffs(trackWear,raceTemp,raceHumidity,tyre):
         'Low':'0.914',
         'Medium':'0.816',
         'High':'0.745',
-        'Very High':'0.665'
+        'Very high':'0.665'
     }
     humFile = open('dataFiles/humData.json')
     humData = json.load(humFile)
@@ -48,26 +48,26 @@ def lookup_wear_coeffs(trackWear,raceTemp,raceHumidity,tyre):
         'soft':'0.0021',
         'xsoft':'0.0012'
     }
-    
+
     tempCoeff = float(tempData[f'{raceTemp}'])
     trackCoeff = float(trackData[f'{trackWear}'])
     humCoeff = float(humData[f'{raceHumidity}'])
     ctCoeff = float(ctData[f'{tyre}'])
-    
+
     return tempCoeff,trackCoeff,humCoeff,ctCoeff
 
 def lookup_car_wear_coeffs(track):
     carFile = open('dataFiles/trackWearData.json')
     wearData = json.load(carFile)
-    
+
     trackWear = wearData[f'{track}']
-    
+
     return trackWear
 
 def lookup_k_value(track):
     kFile = open('dataFiles/kData.json')
     kData = json.load(kFile)
-    
+
     k = kData[f'{track}']
-    
+
     return k

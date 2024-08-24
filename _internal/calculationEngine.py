@@ -102,7 +102,7 @@ def find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData):
     raceTemp = math.ceil((weather['raceQ1TempLow']+weather['raceQ1TempHigh']+weather['raceQ3TempLow']+weather['raceQ2TempHigh']+weather['raceQ4TempLow']+weather['raceQ4TempHigh'])/6)
     raceHumidity = math.ceil((weather['raceQ1HumLow']+weather['raceQ1HumHigh']+weather['raceQ3HumLow']+weather['raceQ2HumHigh']+weather['raceQ4HumLow']+weather['raceQ4HumHigh'])/6)
     trackWear = trackInfo['tyreWear']
-    CTRisk = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60', '65', '70', '75', '80', '85', '90', '95', '100']
+    CTRisk = range(0,101)
     CTTyreLife = {}
 
     for CT in CTRisk:
@@ -121,7 +121,7 @@ def find_fuel_and_tyre_usage(fuelData,carData,trackInfo,weather,officeData):
 def calculate_part_wear(trackInfo,driverInfo,carInfo):
 
     trackWearData = lookup_car_wear_coeffs(trackInfo['trackName'])
-    CTRisk = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60', '65', '70', '75', '80', '85', '90', '95', '100']
+    CTRisk = range(0,101)
     partWear = []
     CTPartWear = {}
     maxWear = []
@@ -207,7 +207,7 @@ def calculate_time_loss(trackInfo,weather,fuelRequired):
         tyreTyreLoss[f'{tyre}'] = calcTyreLoss
         tyreLoss = tyreTyreLoss
 
-    stops = [1,2,3,4]
+    stops = [0,1,2,3,4]
 
     for stop in stops:
         calcFuelLoss = ((lapLossCoeff*fuelRequired)/(1+float(stop)))*((float(trackInfo['laps']))/(1+float(stop))*(1+float(stop)))
@@ -240,9 +240,9 @@ def calculate_best_strategy(fuelRequired, tyreLife, trackInfo, weather, fuelPerL
     best_strategies = {}
 
     # Define possible values for stops, tyres, and CT risk
-    stops = [1, 2, 3, 4]
+    stops = [0, 1, 2, 3, 4]
     tyres = ['xsoft', 'soft', 'medium', 'hard', 'rain']
-    CTRisk = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60', '65', '70', '75', '80', '85', '90', '95', '100']
+    CTRisk = range(0,101)
 
     # Iterate over all possible combinations of stops, CT risk, and tyre choices
     for stop in stops:
@@ -273,14 +273,14 @@ def calculate_best_strategy(fuelRequired, tyreLife, trackInfo, weather, fuelPerL
 
                 # Check if this strategy is better (lower loss or higher CT with same loss) than the current best for this combination
                 if (strategy_key not in best_strategies or
-                    calcCTTyreStopLoss < best_strategies[strategy_key]['loss'] or
-                    (calcCTTyreStopLoss == best_strategies[strategy_key]['loss'] and int(CT) > best_strategies[strategy_key]['Max CT'])):
+                    calcCTTyreStopLoss < best_strategies[strategy_key]['Total time loss'] or
+                    (calcCTTyreStopLoss == best_strategies[strategy_key]['Total time loss'] and int(CT) > best_strategies[strategy_key]['Max CT to 85% wear'])) and calcCTTyreStopLoss != 1e7:
 
                     best_strategies[strategy_key] = {
-                        'stop': stop,
-                        'Max CT': int(CT),
-                        'tyre': tyre,
-                        'loss': calcCTTyreStopLoss,
+                        'Number of stops': stop,
+                        'Max CT to 85% wear': int(CT),
+                        'Tyre choice': tyre,
+                        'Total time loss': round(calcCTTyreStopLoss, 0),
                         'TCD': round(raceTCD, 3),
                         'Fuel per lap': round(fuelPerLap, 3),
                         'High laps per stint': stintHighLaps,
@@ -291,13 +291,13 @@ def calculate_best_strategy(fuelRequired, tyreLife, trackInfo, weather, fuelPerL
                     }
 
     # Convert the dictionary of best strategies to a list and sort by loss (ascending)
-    sorted_best_strategies = sorted(best_strategies.values(), key=lambda x: (x['loss'], -x['Max CT']))
+    sorted_best_strategies = sorted(best_strategies.values(), key=lambda x: (x['Total time loss'], -x['Max CT to 85% wear']))
 
     # Return the list of the best strategies per stop/tyre combination
     return sorted_best_strategies
 
 
-def calculate_test_wear(trackInfo,driverInfo,carInfo):
+def calculate_test_wear(trackInfo,driverInfo,carInfo,fuelData,officeData):
 
     trackWearData = lookup_car_wear_coeffs(trackInfo['trackName'])
     partWear = []
@@ -316,7 +316,34 @@ def calculate_test_wear(trackInfo,driverInfo,carInfo):
         calcLapsWear[f'{part}'] = math.floor(1/partTestWear)
         partWear = calcPartWear
         lapsPerPercent = calcLapsWear
+    
+    engineLvl = str(int(carInfo['carPartLevels']['engine']))
+    fuelCoeff = float(fuelData[engineLvl])
+    fuelConsumption = fuelCoeff*1.05
+    fuelReq = math.ceil(fuelConsumption * trackInfo['raceDistance'])
+    fuelReqPerLap = fuelReq/trackInfo['laps']
+    tyreDurability = officeData['tyreData']['durability']
+    tyreDurabilityData = lookup_tyre_life(tyreDurability)
+    trackWear = trackInfo['tyreWear']
+    temp = trackInfo['temp']
+    humidity = trackInfo['hum']
+    
+    tyres = ['xsoft','soft','medium','hard','rain']
+    CT = 0
+    
+    calcTyreLife = {}
+    calcTyreLaps = {}
+    for tyre in tyres:
+        baseTyreLife = float(tyreDurabilityData[tyre])
+        trackCoeff,tempCoeff,humCoeff,ctCoeff = lookup_wear_coeffs(trackWear,temp,humidity,tyre)
+        wearCoeff = trackCoeff*tempCoeff*humCoeff*(1-(int(CT)*ctCoeff))
+        maxTyreLife = baseTyreLife*wearCoeff
+        calcTyreLife[f'{tyre}'] = math.floor(maxTyreLife)
+        calcTyreLaps[f'{tyre}'] = math.floor(maxTyreLife/(trackInfo['raceDistance']/trackInfo['laps']))
+    tyreLife = calcTyreLife
+    tyreLaps = calcTyreLaps
 
-    testWear = {'Test Wear per lap': partWear, 'Laps per 1% wear':lapsPerPercent}
+    testWear = {'Test Wear per lap': partWear, 'Laps per 1% wear': lapsPerPercent}
+    testData = {'Fuel Per Lap': round(fuelReqPerLap, 3), 'Tyre Life': tyreLife, 'Max Tyre Laps': tyreLaps}
 
-    return testWear
+    return testWear,testData
