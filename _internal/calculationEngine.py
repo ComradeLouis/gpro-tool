@@ -253,7 +253,7 @@ def calculate_best_strategy(fuelRequired, tyreLife, trackInfo, weather, fuelPerL
 
         for CT in CTRisk:
             for tyre in tyres:
-                chosenTyreLife = (tyreLife[f'{CT}'][f'{tyre}']*0.85)
+                chosenTyreLife = (tyreLife[f'{CT}'][f'{tyre}']*0.9)
                 calcTyreLoss = tyreLoss[f'{tyre}']
                 calcCTTyreStopLoss = calcTyreLoss + calcFuelLoss + calcStopLoss
 
@@ -272,13 +272,11 @@ def calculate_best_strategy(fuelRequired, tyreLife, trackInfo, weather, fuelPerL
                 strategy_key = (stop, tyre)
 
                 # Check if this strategy is better (lower loss or higher CT with same loss) than the current best for this combination
-                if (strategy_key not in best_strategies or
-                    calcCTTyreStopLoss < best_strategies[strategy_key]['Total time loss'] or
-                    (calcCTTyreStopLoss == best_strategies[strategy_key]['Total time loss'] and int(CT) > best_strategies[strategy_key]['Max CT to 85% wear'])) and calcCTTyreStopLoss != 1e7:
+                if calcCTTyreStopLoss != 1e7:
 
                     best_strategies[strategy_key] = {
                         'Number of stops': stop,
-                        'Max CT to 85% wear': int(CT),
+                        'Max CT to 90% wear': int(CT),
                         'Tyre choice': tyre,
                         'Total time loss': round(calcCTTyreStopLoss, 0),
                         'TCD': round(raceTCD, 3),
@@ -291,7 +289,7 @@ def calculate_best_strategy(fuelRequired, tyreLife, trackInfo, weather, fuelPerL
                     }
 
     # Convert the dictionary of best strategies to a list and sort by loss (ascending)
-    sorted_best_strategies = sorted(best_strategies.values(), key=lambda x: (x['Total time loss'], -x['Max CT to 85% wear']))
+    sorted_best_strategies = sorted(best_strategies.values(), key=lambda x: (x['Total time loss'], -x['Max CT to 90% wear']))
 
     # Return the list of the best strategies per stop/tyre combination
     return sorted_best_strategies
