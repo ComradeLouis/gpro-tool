@@ -16,4 +16,6 @@ To use this yourself - create the API token as explained on above website (throu
 
 -- Added 29/07 - testing wear data
 
+-- Added 26/08 - better strategy calculations, plus limiting max tyre wear to max 90% waer
+
 To be added - calcluation of best testing stint length to minimise wear
