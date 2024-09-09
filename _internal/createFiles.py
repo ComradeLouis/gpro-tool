@@ -61,7 +61,7 @@ def write_excel(target_path,target_file, data):
             column_length = 20
             col_idx = strategy.columns.get_loc(column)
             writer.sheets['Strategy'].set_column(col_idx, col_idx, column_length)
-        writer.sheets['Strategy'].set_column(11, 11, column_length)
+        writer.sheets['Strategy'].set_column((col_idx+1), (col_idx+1), column_length)
         raceWear.to_excel(writer,sheet_name="Race Wear",index=True)
         endOfRaceWear.to_excel(writer,sheet_name="End of Race Wear",index=True)
         testingWear.to_excel(writer,sheet_name="Testing Wear",index=True)
