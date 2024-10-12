@@ -33,7 +33,7 @@ def lookup_wear_coeffs(trackWear,raceTemp,raceHumidity,tyre):
     tempFile = open('dataFiles/tempData.json')
     tempData = json.load(tempFile)
     trackData = {
-        'Very Low':'1.085',
+        'Very low':'1.085',
         'Low':'0.914',
         'Medium':'0.816',
         'High':'0.745',
